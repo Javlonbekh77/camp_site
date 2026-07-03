@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0B1F3A"/>
+  <circle cx="945" cy="90" r="210" fill="#F97316" opacity=".75"/>
+  <circle cx="170" cy="520" r="260" fill="#06B6D4" opacity=".45"/>
+  <text x="90" y="230" fill="#fff" font-family="Arial, sans-serif" font-size="84" font-weight="800">STC-2026</text>
+  <text x="90" y="320" fill="#fff" font-family="Arial, sans-serif" font-size="52" font-weight="700">Summer Tech Camp</text>
+  <text x="90" y="400" fill="#dbeafe" font-family="Arial, sans-serif" font-size="34">Python • Data Analytics • Robotics • Startup</text>
+</svg>

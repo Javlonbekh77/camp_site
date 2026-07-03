@@ -1,0 +1,828 @@
+STC-2026 (Summer Tech Camp 2026) — Full Website Prompt for Antigravity / Codex / Gemini
+
+ROLE:
+You are an expert full-stack product engineer, UX designer, conversion-focused landing page strategist, and startup-grade frontend developer. Build a modern, attractive, production-ready website for a local summer technology education project named:
+
+STC-2026 — Summer Tech Camp 2026
+
+The site must help visitors understand the project, discover the camp direction that fits them, and register for one or more camp programs. It must also include a private admin panel where the organizer can see registrations, analyze demand by camp direction, export data, and manage incoming applicants.
+
+The site language must be mainly Uzbek Latin. Keep some technical names in English where natural: Python, SQL, Power BI, Startup, Robotics, Data Analytics, Competitive Programming, Vibe Coding, etc.
+
+PROJECT CONTEXT:
+STC-2026 is a summer tech camp in Chiroqchi for motivated students, teachers, kids, and young people who want to spend their summer usefully by learning modern technology-related skills. This is not only a course. It should feel like a local youth learning movement: a place to find direction, learn real skills, ask questions, join a motivated environment, and start building a future path.
+
+Main message:
+“Yozni bekor o‘tkazma. O‘zingga mos yo‘nalishni tanla. STC-2026 bilan yozda real skill o‘rgan.”
+
+IMPORTANT DATES:
+Registration deadline:
+11 July 2026, 23:59
+
+First planned lesson:
+13 July 2026, 09:00
+
+First week:
+Sinov hafta. Students can join the first week as a trial week and see whether the camp direction fits them.
+
+Referral discount:
+For every person a participant brings with them, currently give 50,000 UZS discount. This value should be easy to change later from code/config.
+
+Location:
+The exact location will be provided later. For now show placeholder:
+“Manzil tez orada e’lon qilinadi” or “Chiroqchi — aniq manzil keyinroq beriladi”.
+
+Contact:
+Use placeholders that can be edited later:
+Telegram: @your_username
+Phone: +998 XX XXX XX XX
+Website link placeholder: https://stc-2026.uz or replaceable.
+
+CORE CAMP DIRECTIONS:
+
+1) AlgoCamp
+For: school students, informatics olympiad learners, informatics teachers, students interested in Python and competitive programming.
+Topics:
+- Python from zero to hero
+- Algorithms
+- Competitive Programming basics
+- Informatics olympiad preparation
+- Problem-solving mindset
+Positioning:
+“Formulani yodlash emas, masalani fikrlab yechish.”
+
+2) DataCamp
+For: young people who want to learn a modern profession and start with Data Analytics.
+Topics:
+- Python from zero to hero
+- Data analysis
+- SQL
+- Power BI
+- Dashboards and business insights
+Positioning:
+“Ma’lumotlarni tushunish — zamonaviy kasblarga kirish eshigi.”
+
+Important note:
+There is a global platform named DataCamp. In this website this is a local STC-2026 direction. If needed, display it as “STC DataCamp” to avoid confusion.
+
+3) RoboCamp
+For: kids and young learners interested in robocoding, robotics, creativity, logic, and practical technology.
+Topics:
+- Scratch in robocoding
+- Robotics basics
+- Creative thinking
+- Logic through visual programming
+- Robototexnika
+Positioning:
+“Bolalar uchun texnologiyani o‘yin orqali emas, mantiq va ijod orqali o‘rganish.”
+
+4) StartupCamp
+For: people with ideas, students interested in startups, people who want to build a prototype even if they are not professional coders.
+Topics:
+- Build your dream using vibe coding
+- Idea validation
+- Prototype building
+- No-code / low-code / AI-assisted building
+- Networking
+- Pitching basics
+Positioning:
+“G‘oya bor — endi uni real ko‘rinishga keltirish vaqti.”
+
+GENERAL WEBSITE GOAL:
+Create a modern, high-converting, attractive landing + registration + admin platform.
+
+The website must:
+- explain STC-2026 clearly;
+- show the problem: summer can pass without useful learning, many young people do not know where to start, opportunities feel limited outside big cities;
+- present STC-2026 as the solution;
+- show all camp directions with clear cards;
+- allow users to learn more about each camp;
+- include an interactive AI-style questionnaire that recommends the most suitable camp direction;
+- allow users to register for one or more camps;
+- allow users to paste or save the result of their “AI suitability test” inside the registration form;
+- include an admin panel to see all registrations, filter by camp, view analytics, and export CSV.
+
+TECH STACK:
+Build the project using:
+- Next.js with App Router
+- TypeScript
+- Tailwind CSS
+- shadcn/ui components if available
+- Framer Motion for smooth modern animations
+- React Hook Form + Zod for form validation
+- Supabase for database storage
+- Optional: Zustand or React Context for small state management
+- Optional: Recharts for admin analytics charts
+- Optional: Lucide React icons
+
+If Supabase credentials are not provided, implement a clean fallback using localStorage for development/demo mode, but the main production-ready path must be Supabase. All Supabase integration should be cleanly abstracted in a service layer so it can be replaced later.
+
+ENVIRONMENT VARIABLES:
+Create a .env.example with:
+
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+ADMIN_PASSCODE=change_this_passcode
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_REGISTRATION_DEADLINE=2026-07-11T23:59:00+05:00
+NEXT_PUBLIC_FIRST_LESSON=2026-07-13T09:00:00+05:00
+NEXT_PUBLIC_REFERRAL_DISCOUNT=50000
+NEXT_PUBLIC_TELEGRAM=@your_username
+NEXT_PUBLIC_PHONE=+998 XX XXX XX XX
+
+AUTH / ADMIN:
+Keep admin simple for MVP:
+- Admin route: /admin-stc-2026
+- Admin login uses ADMIN_PASSCODE.
+- Store admin session in httpOnly cookie if possible. If using a pure client approach, use sessionStorage but clearly mark it as MVP only.
+- Admin panel should not be visible in navigation.
+- Include a button “Admin panel” only in development, or hide it behind direct URL.
+
+DATABASE DESIGN:
+Create Supabase SQL table suggestions in a file called supabase/schema.sql.
+
+Tables:
+
+1) registrations
+Fields:
+- id UUID primary key default gen_random_uuid()
+- created_at timestamptz default now()
+- full_name text not null
+- phone text not null
+- telegram text
+- age int
+- status text -- school_student, teacher, university_student, graduate, parent_for_child, other
+- school_or_work text
+- location text
+- selected_camps text[] not null
+- primary_recommended_camp text
+- quiz_score jsonb
+- quiz_summary text
+- user_pasted_ai_result text
+- motivation text
+- current_level text -- beginner, some_basics, intermediate
+- has_laptop boolean
+- preferred_format text -- offline, online, hybrid, not_sure
+- preferred_time text
+- referral_name text
+- referral_phone text
+- referred_by text
+- discount_note text
+- consent boolean not null default false
+- status_admin text default 'new' -- new, contacted, confirmed, trial_week, rejected, waiting
+- admin_note text
+
+2) quiz_sessions
+Fields:
+- id UUID primary key default gen_random_uuid()
+- created_at timestamptz default now()
+- visitor_id text
+- answers jsonb
+- scores jsonb
+- recommended_camp text
+- secondary_camps text[]
+- summary text
+
+3) admin_events optional
+Fields:
+- id UUID primary key
+- created_at timestamptz default now()
+- action text
+- metadata jsonb
+
+PAGES / ROUTES:
+
+1) Home page: /
+Sections:
+A. Hero
+- Fullscreen-ish modern hero
+- Include STC-2026 logo placeholder
+- Headline:
+  “Summer Tech Camp 2026”
+  “Yozni bekor o‘tkazma — real skill bilan boshlang.”
+- Subtitle:
+  “Chiroqchida yoshlar uchun Python, algoritmlar, data analytics, robototexnika va startup yo‘nalishlarida yozgi tech camp.”
+- Primary CTA:
+  “Mos yo‘nalishni aniqlash”
+- Secondary CTA:
+  “Camp’larni ko‘rish”
+- Small urgency chip:
+  “Qabul: 11-iyul 23:59 gacha”
+  “Birinchi dars: 13-iyul 09:00”
+  “Birinchi hafta: sinov hafta”
+
+Hero should include video area:
+- If /public/videos/stc-launch.mp4 exists, show it.
+- Otherwise show modern placeholder card:
+  “STC-2026 launch video”
+- After video or below video, show CTA to start AI questionnaire.
+
+B. Problem section
+Show the emotional problem:
+- Yoz tez o‘tadi.
+- Ko‘p yoshlar o‘rganishni xohlaydi, lekin nimadan boshlashni bilmaydi.
+- Imkoniyat faqat katta shaharlarda bo‘lishi shart emas.
+- Skill bugun kerak: texnologiya, sun’iy intellekt, ma’lumotlar, kod yozish, kreativ fikrlash.
+
+Tone should be inspiring, not blaming.
+
+C. Solution section
+Introduce:
+“STC-2026 — bu darslar to‘plami emas, yozda o‘rganadigan, savol beradigan va harakat qiladigan muhit.”
+
+D. Camp directions grid
+Four modern cards:
+- AlgoCamp
+- DataCamp / STC DataCamp
+- RoboCamp
+- StartupCamp
+
+Each card includes:
+- target audience
+- 3–5 topics
+- “Kimlar uchun?”
+- “Nima o‘rganiladi?”
+- “Batafsil”
+- “Shu yo‘nalishga yozilish”
+
+E. AI-style questionnaire entry section
+Title:
+“Qaysi camp sizga mos?”
+Subtitle:
+“Bir necha savolga javob bering. STC Guide sizga eng mos yo‘nalishni tavsiya qiladi.”
+
+Button:
+“Moslik testini boshlash”
+
+F. Timeline / important dates
+- Qabul ochiq
+- Deadline: 11 July 23:59
+- First lesson: 13 July 09:00
+- Trial week: first week
+- Location coming soon
+
+G. Referral discount section
+Text:
+“Do‘stingizni ham olib keling — har bir olib kelgan odam uchun hozircha 50,000 so‘m chegirma.”
+Add note:
+“Chegirma shartlari keyinchalik yangilanishi mumkin.”
+
+H. FAQ section
+Questions:
+- STC-2026 kimlar uchun?
+- Oldindan bilim kerakmi?
+- Bitta odam bir nechta camp’ga yozila oladimi?
+- Birinchi hafta sinov bo‘ladimi?
+- Darslar qachon boshlanadi?
+- Qabul qachongacha?
+- Manzil qayerda?
+- Ro‘yxatdan o‘tganimdan keyin nima bo‘ladi?
+
+I. Final CTA
+“Yozni bekor o‘tkazmang. O‘zingizga mos yo‘nalishni tanlang.”
+Buttons:
+- “Moslik testini boshlash”
+- “Ro‘yxatdan o‘tish”
+
+2) Camp detail pages: /camp/[slug]
+For each camp, create a detail page:
+- Hero title
+- “Kimlar uchun?”
+- “Nima o‘rganiladi?”
+- “Natijada nima qila olasiz?”
+- Example learning path / weekly plan
+- Requirements
+- Who should not choose this camp
+- CTA:
+  “Bu yo‘nalishga yozilish”
+  “Avval moslik testini topshirish”
+
+Use static data from a camps.ts file.
+
+3) Quiz page or modal: /quiz or modal on home
+Must look like a chat with an AI guide named:
+“STC Guide”
+
+The AI guide is not connected to a real AI API yet. Implement a deterministic scoring algorithm now. Later it should be easy to replace with OpenAI/Gemini API.
+
+Quiz flow:
+- Use chat-style UI.
+- One question at a time.
+- Progress indicator.
+- Smooth animation.
+- User can go back.
+- User can skip optional questions.
+- At the end show recommendation.
+
+Questions:
+1. Siz kimsiz?
+Options:
+- Maktab o‘quvchisi
+- Informatika o‘qituvchisi
+- Talaba
+- Kasb o‘rganmoqchi bo‘lgan yosh
+- Farzandim uchun qiziqyapman
+- G‘oyasi bor / startupga qiziqaman
+- Boshqa
+
+2. Qaysi narsa sizni ko‘proq qiziqtiradi?
+Options:
+- Masala yechish, algoritmlar, olimpiada
+- Ma’lumotlar, jadval, biznes tahlil
+- Robot, qurilma, bolalar uchun coding
+- G‘oya, startup, mahsulot yasash
+- Hali bilmayman
+
+3. Hozirgi darajangiz?
+Options:
+- Nol dan boshlayman
+- Ozgina tushuncham bor
+- Python/IT bo‘yicha biroz ishlaganman
+- Aniq yo‘nalishni chuqurlashtirmoqchiman
+
+4. Maqsadingiz nima?
+Options:
+- Informatika olimpiadasiga tayyorlanish
+- Zamonaviy kasbga birinchi qadam
+- Farzandimda mantiq va texnologiyaga qiziqish uyg‘otish
+- O‘z g‘oyamni prototipga aylantirish
+- Yozni foydali o‘tkazish
+
+5. Qaysi ish sizga yoqadi?
+Options:
+- Qiyin masalani yechish
+- Excel/jadval/grafiklardan ma’no topish
+- Nimadir yasash, robotni harakatlantirish
+- Yangi g‘oyani sinab ko‘rish
+- Hamma yo‘nalishni ko‘rib chiqish
+
+6. Kompyuter yoki laptopingiz bormi?
+Options:
+- Ha
+- Yo‘q
+- Ba’zan foydalanishim mumkin
+- Farzandim uchun so‘rayapman
+
+7. Darsda qanday format qulay?
+Options:
+- Offline
+- Online
+- Hybrid
+- Hozircha bilmayman
+
+8. Bitta camp tanlash kerak bo‘lsa, qaysi birini tanlardingiz?
+Options:
+- AlgoCamp
+- DataCamp
+- RoboCamp
+- StartupCamp
+- Hali aniq emas
+
+9. Motivation text optional:
+“Nima uchun bu camp’ga qo‘shilmoqchisiz?”
+
+SCORING ALGORITHM:
+Create scores:
+algoScore, dataScore, roboScore, startupScore
+
+Example:
+- If interest = algorithms/olympiad => Algo +4
+- If status = informatics teacher => Algo +3
+- If goal = olympiad => Algo +5
+- If interest = data/business/table => Data +4
+- If goal = modern profession => Data +4
+- If likes Excel/jadval/grafik => Data +3
+- If parent_for_child => Robo +3
+- If interest = robot/kids coding => Robo +5
+- If goal = child logic/technology => Robo +4
+- If has idea/startup => Startup +5
+- If interest = idea/product => Startup +4
+- If goal = prototype => Startup +5
+- If user does not know => add small points to all and recommend “Start with guided consultation” plus top 2 camps.
+
+Recommendation output:
+- Primary recommended camp
+- Secondary recommended camps
+- Suitability percentage for each camp
+- Short explanation in Uzbek
+- Confidence-building message
+- Suggested next step:
+  “Endi ro‘yxatdan o‘tish formasini to‘ldiring. Moslik natijangiz avtomatik qo‘shiladi.”
+
+Create copyable text:
+“AI moslik natijasi”
+The user can copy it and paste into registration if needed, but if they go directly to registration, prefill it automatically using query/state/localStorage.
+
+Example result text:
+“Sizga eng mos yo‘nalish: DataCamp. Sabab: siz zamonaviy kasb, ma’lumotlar tahlili va amaliy ko‘nikmalarga qiziqishingizni bildirdingiz. Ikkinchi mos yo‘nalish: StartupCamp. Tavsiya: DataCamp’dan boshlash sizga Python, SQL va Power BI orqali real kasbiy yo‘nalish beradi.”
+
+4) Registration page or modal: /register
+It can open as a modal from home page and also exist as a standalone page.
+
+Registration form requirements:
+Fields:
+- Full name required
+- Phone required
+- Telegram optional
+- Age optional/required
+- Status required
+- School/workplace optional
+- Location optional
+- Select one or more camps required:
+  AlgoCamp, DataCamp, RoboCamp, StartupCamp
+- Primary recommended camp auto-filled if quiz was completed
+- AI suitability result textarea:
+  label: “Moslik testi natijasi”
+  helper: “Agar moslik testini topshirgan bo‘lsangiz, natija shu yerga avtomatik tushadi. Xohlasangiz, o‘zingiz ham kiritishingiz mumkin.”
+- Motivation textarea:
+  “Nega STC-2026’da qatnashmoqchisiz?”
+- Current level
+- Has laptop
+- Preferred format
+- Preferred time
+- Referral fields:
+  “Sizni kim taklif qildi?”
+  “Siz bilan birga yana kimlar keladi?”
+- Consent checkbox:
+  “Ma’lumotlarim STC-2026 ro‘yxatdan o‘tish jarayoni uchun saqlanishiga roziman.”
+- Submit button:
+  “Ro‘yxatdan o‘tish”
+
+After submit:
+- Show success page/modal:
+  “Arizangiz qabul qilindi!”
+  “Tez orada siz bilan bog‘lanamiz.”
+  “Qabul muddati: 11-iyul 23:59”
+  “Birinchi dars: 13-iyul 09:00”
+  “Birinchi hafta sinov hafta.”
+- Provide buttons:
+  “Telegram orqali bog‘lanish”
+  “Bosh sahifaga qaytish”
+
+Data must be saved to Supabase registrations table.
+If Supabase is missing, store in localStorage and show development warning.
+
+5) Admin panel: /admin-stc-2026
+Admin features:
+- Passcode login
+- Dashboard overview:
+  total registrations
+  registrations today
+  registrations by camp
+  registrations by status
+  quiz recommended camp distribution
+  top selected camp combinations
+  number of people with referral
+  estimated referral discounts
+- Filters:
+  by camp
+  by status_admin
+  by date
+  by age/status
+  by search name/phone/telegram
+- Table columns:
+  created_at
+  full_name
+  phone
+  telegram
+  selected_camps
+  primary_recommended_camp
+  status
+  status_admin
+  actions
+- Row detail drawer:
+  full registration info
+  AI quiz summary
+  user_pasted_ai_result
+  motivation
+  referral info
+  admin note
+- Admin can update:
+  status_admin
+  admin_note
+- Export:
+  CSV export all
+  CSV export filtered
+- Analytics:
+  Use simple charts with Recharts:
+  bar chart by camp
+  pie/donut chart by applicant status
+  timeline registrations by day
+- Privacy:
+  Keep admin route hidden.
+  Do not expose admin passcode in client code if possible.
+
+DESIGN REQUIREMENTS:
+The website must look modern and premium but still warm/local.
+Style:
+- glassmorphism cards where appropriate
+- clean dark/blue/orange/green color palette
+- gradient hero background
+- subtle animated blobs or grid patterns
+- tech + summer vibe
+- rounded cards
+- smooth hover states
+- strong mobile responsiveness
+- 9:16 video embed should look good on mobile
+- avoid childish design
+- avoid too many icons or visual noise
+- use Uzbek typography with readable font sizes
+- ensure contrast and accessibility
+
+Suggested colors:
+- Navy: #0B1F3A
+- Blue: #2563EB
+- Cyan: #06B6D4
+- Orange: #F97316
+- Yellow: #FACC15
+- Green: #22C55E
+- Background: #F8FAFC
+- Dark text: #0F172A
+
+Possible visual identity:
+- STC-2026 logo in hero
+- summer sun + circuit pattern
+- upward arrow/growth motif
+- small badges:
+  “Sinov hafta”
+  “Chiroqchi”
+  “4 yo‘nalish”
+  “Qabul 11-iyulgacha”
+
+COPYWRITING STYLE:
+Use Uzbek Latin. Make it clean, inspiring, direct, and not too aggressive.
+
+Avoid:
+- “100% natija”
+- “Eng zo‘r kurs”
+- unrealistic promises
+- overhyped fake claims
+
+Use:
+- “yo‘nalish topish”
+- “real ko‘nikma”
+- “birga o‘rganadigan muhit”
+- “sinov hafta”
+- “o‘zingizga mos camp”
+- “Chiroqchida ham texnologiya muhitini boshlaymiz”
+
+HOME PAGE SAMPLE COPY:
+
+Hero title:
+“Summer Tech Camp 2026”
+
+Hero subtitle:
+“Chiroqchida yozni bekor o‘tkazmaydigan yoshlar uchun Python, data analytics, robototexnika va startup yo‘nalishlarida yozgi tech camp.”
+
+CTA:
+“Mos yo‘nalishni aniqlash”
+“Ro‘yxatdan o‘tish”
+
+Problem:
+“Yoz tez o‘tadi. Ko‘pchilik dam oladi, telefon titkilaydi, keyin esa sentyabr kelganda savol qoladi: bu yozda nimani o‘rgandim? STC-2026 shu savolga amaliy javob bo‘lishi uchun yaratilmoqda.”
+
+Solution:
+“STC-2026 — bu faqat dars emas. Bu o‘rganish, savol berish, yo‘nalish topish va harakat qiladigan yoshlar muhitiga qo‘shilish imkoniyati.”
+
+Trial week:
+“Birinchi hafta sinov hafta. Siz camp muhitini ko‘rib, yo‘nalish sizga mos yoki yo‘qligini his qilishingiz mumkin.”
+
+Deadline:
+“Qabul 11-iyul 23:59 gacha davom etadi.”
+
+First lesson:
+“Birinchi dars reja bo‘yicha 13-iyul 09:00 da boshlanadi.”
+
+Referral:
+“Do‘stingizni ham olib keling. Har bir olib kelgan odam uchun hozircha 50,000 so‘m chegirma beriladi.”
+
+CAMP DATA STRUCTURE:
+Create a file src/data/camps.ts:
+
+Each camp object:
+- slug
+- name
+- shortName
+- tagline
+- color
+- icon
+- whoFor[]
+- topics[]
+- outcomes[]
+- requirements[]
+- weeklyPlan[]
+- ctaText
+
+Suggested weekly plans:
+
+AlgoCamp:
+Week 1: Python basics, input/output, conditions, loops
+Week 2: functions, lists, strings, problem-solving patterns
+Week 3: algorithms basics, sorting/searching, complexity intuition
+Week 4: CP practice, olympiad-style tasks, mock contest
+
+DataCamp:
+Week 1: Python basics for data
+Week 2: data cleaning and analysis
+Week 3: SQL basics and practical queries
+Week 4: Power BI dashboards and mini project
+
+RoboCamp:
+Week 1: Scratch logic, events, loops
+Week 2: robocoding tasks, sensors/logic concepts
+Week 3: robotics basics and simple project
+Week 4: final robot/creative challenge
+
+StartupCamp:
+Week 1: idea selection and problem validation
+Week 2: vibe coding / AI-assisted prototype
+Week 3: landing page or MVP building
+Week 4: pitch, feedback, networking
+
+Do not present these as final official schedules. Add note:
+“Reja guruh darajasi va formatiga qarab moslashtirilishi mumkin.”
+
+COMPONENTS TO BUILD:
+- Header
+- Mobile navigation
+- HeroSection
+- VideoHero
+- ProblemSection
+- CampCard
+- CampGrid
+- QuizChat
+- QuizResult
+- RegistrationForm
+- DeadlineBanner
+- ReferralBanner
+- FAQAccordion
+- Footer
+- AdminLogin
+- AdminDashboard
+- AdminTable
+- AdminAnalytics
+- ExportCSVButton
+- StatusBadge
+
+UX DETAILS:
+- Sticky header on scroll
+- Floating CTA on mobile:
+  “Ro‘yxatdan o‘tish”
+- Countdown timer to registration deadline
+- Smooth scroll links
+- Quiz result should have a “Register with this result” button
+- If user completes quiz, save result to localStorage and prefill register form
+- If user selects multiple camps, registration form should support checkboxes
+- Add form autosave to localStorage so user does not lose data
+- Add loading states, error states, success states
+- Add toast notifications
+
+VALIDATION:
+Use Zod.
+- full_name min 3
+- phone required and Uzbek phone-friendly validation
+- selected_camps min 1
+- consent must be true
+- age optional but if entered 5–80
+- telegram optional but if entered should allow @username or link
+
+ACCESSIBILITY:
+- Proper labels
+- Keyboard navigation
+- Sufficient color contrast
+- No text too small on mobile
+- Buttons accessible
+- Reduced motion support if possible
+
+SEO:
+Add metadata:
+Title:
+“STC-2026 — Summer Tech Camp 2026 | Chiroqchi”
+Description:
+“Chiroqchida yoshlar uchun Python, Data Analytics, Robototexnika va Startup yo‘nalishlarida yozgi tech camp. Qabul 11-iyul 23:59 gacha.”
+
+Open Graph:
+- title
+- description
+- image placeholder /og-stc-2026.png
+
+PERFORMANCE:
+- Optimize images
+- Lazy load video
+- Keep bundle clean
+- Avoid heavy unnecessary libraries
+- Use server components where appropriate, client components only where needed
+
+ADMIN ANALYTICS DETAILS:
+Show:
+- Total applicants
+- Applicants by camp
+- Applicants who selected multiple camps
+- Top recommended camp from quiz
+- Applicants with laptop
+- Applicants by status
+- Referral count
+- Potential discount total:
+  referral_count * NEXT_PUBLIC_REFERRAL_DISCOUNT
+- Export CSV
+
+CSV columns:
+created_at, full_name, phone, telegram, age, status, school_or_work, selected_camps, primary_recommended_camp, current_level, has_laptop, preferred_format, preferred_time, referral_name, referred_by, motivation, status_admin, admin_note
+
+FUTURE AI API INTEGRATION:
+Create a clean abstraction:
+src/lib/recommendation/recommendationEngine.ts
+
+It should export:
+- calculateCampScores(answers)
+- generateRecommendationText(scores, answers)
+- getRecommendation(answers)
+
+Add a TODO comment:
+“Later replace deterministic engine with OpenAI/Gemini API while keeping same return shape.”
+
+Return shape:
+{
+  primaryCamp: string,
+  secondaryCamps: string[],
+  scores: {
+    AlgoCamp: number,
+    DataCamp: number,
+    RoboCamp: number,
+    StartupCamp: number
+  },
+  percentages: {
+    AlgoCamp: number,
+    DataCamp: number,
+    RoboCamp: number,
+    StartupCamp: number
+  },
+  summary: string,
+  confidenceMessage: string,
+  nextStep: string
+}
+
+IMPORTANT:
+Do not fake a real AI if no API is connected. UI can say:
+“STC Guide sizning javoblaringiz asosida moslikni hisoblaydi.”
+Do not claim “AI API” is active unless it is integrated.
+
+REGISTRATION RESULT:
+After successful registration, show:
+“Arizangiz qabul qilindi. STC-2026 jamoasi tez orada siz bilan bog‘lanadi.”
+
+Also show:
+- selected camps
+- recommended camp if available
+- deadline
+- first lesson date
+- trial week note
+- Telegram contact button
+
+DEPLOYMENT:
+Prepare project for Vercel deployment.
+Add README.md with:
+- setup steps
+- install dependencies
+- configure Supabase
+- create .env.local
+- run dev
+- deploy to Vercel
+- admin route info
+- how to update camp content
+- how to update deadline, first lesson, referral discount
+
+ACCEPTANCE CRITERIA:
+The final project is complete if:
+1. Home page looks modern and attractive on mobile and desktop.
+2. User can watch/see launch video section.
+3. User can read all camp information.
+4. User can take AI-style quiz.
+5. Quiz returns a suitable camp recommendation using deterministic scoring.
+6. User can register for one or more camps.
+7. Registration stores data in Supabase or demo fallback.
+8. Quiz result is saved and can be attached to registration.
+9. Admin can log in using passcode.
+10. Admin can see registrations, filter them, update status/note, view analytics, and export CSV.
+11. All copy is in Uzbek Latin and feels professional.
+12. Design feels like a serious, modern summer tech camp, not a generic template.
+
+BUILD INSTRUCTIONS:
+Start by creating the full project structure and implementing the main working MVP. Prioritize function over unnecessary complexity, but keep the design premium.
+
+After building:
+- Run lint/type-check.
+- Fix errors.
+- Provide instructions for replacing placeholders:
+  logo, video, phone, Telegram, location, Supabase keys, website link.
+
+END PRODUCT:
+A complete STC-2026 website with:
+- landing page
+- camp detail pages
+- AI-style fit questionnaire
+- registration form
+- admin panel
+- analytics
+- CSV export
+- future AI-ready recommendation architecture

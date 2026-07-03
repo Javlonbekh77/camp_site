@@ -1,0 +1,450 @@
+STC-2026 — Add 45-Day Module Weekly Plans to Website
+
+ROLE:
+You are editing the existing STC-2026 (Summer Tech Camp 2026) website project. Add detailed 45-day module plans for all camp directions and display them beautifully on the landing page and each camp detail page.
+
+CONTEXT:
+STC-2026 is a 1.5-month / 45-calendar-day summer tech camp. Planned start:
+13 July 2026, 09:00.
+Classes are from Monday to Saturday. Sunday is rest / homework / recovery day.
+If counted as 45 calendar days from 13 July 2026, the module ends on 26 August 2026.
+This gives 39 actual class sessions:
+- Week 1: 13–18 July
+- Week 2: 20–25 July
+- Week 3: 27 July–1 August
+- Week 4: 3–8 August
+- Week 5: 10–15 August
+- Week 6: 17–22 August
+- Final 3 days: 24–26 August
+
+IMPORTANT:
+Do not present the plan as absolutely fixed. Add this note everywhere:
+“Reja guruh darajasi, format va texnik imkoniyatlarga qarab moslashtirilishi mumkin.”
+
+FIRST WEEK:
+The first week is a trial week:
+“Birinchi hafta — sinov hafta. Ishtirokchilar camp muhiti, mentor yondashuvi va tanlangan yo‘nalish o‘zlariga mos yoki yo‘qligini ko‘rib olishlari mumkin.”
+
+GENERAL DAILY STRUCTURE:
+Use this structure in the UI:
+09:00 — Start
+09:00–09:15 — Recap / warm-up
+09:15–10:15 — Main topic
+10:15–10:30 — Short break
+10:30–11:45 — Practice / challenge
+11:45–12:00 — Reflection, task, next step
+
+If exact lesson duration is not confirmed, show only:
+“Darslar 09:00 da boshlanadi. Davomiylik guruh va mavzuga qarab belgilanadi.”
+
+DATA STRUCTURE:
+Update src/data/camps.ts or create src/data/modulePlans.ts.
+
+Each camp should have:
+moduleDuration: "45 kun / 1.5 oy"
+startTime: "09:00"
+scheduleType: "Dushanba–Shanba"
+trialWeek: true
+weeks: [
+  {
+    week: 1,
+    title: "...",
+    dates: "13–18 iyul",
+    goal: "...",
+    output: "...",
+    days: [
+      { day: "Dushanba", topic: "...", practice: "...", result: "..." }
+    ]
+  }
+]
+
+Add finalThreeDays section for each camp:
+{
+  title: "Yakuniy 3 kun",
+  dates: "24–26 avgust",
+  goal: "...",
+  days: [...]
+}
+
+DISPLAY REQUIREMENTS:
+On home page:
+- In camp cards, show compact plan preview:
+  “45 kun • Dushanba–Shanba • 09:00 • 1-hafta sinov”
+  “6 hafta + yakuniy 3 kun”
+- Add button: “45 kunlik rejani ko‘rish”
+
+On camp detail pages:
+- Add a section: “45 kunlik modul rejasi”
+- Use tabs or accordion for weeks.
+- Each week card should show: week title, dates, goal, output, daily plan.
+- Add visual timeline.
+
+On registration page:
+When user selects a camp, show short module plan preview.
+
+Admin panel:
+Optional but useful:
+- Show selected camps.
+- Add filter by camp.
+- Add note that module plan was shown to the user.
+
+CONTENT TO ADD:
+
+1) AlgoCamp — 45-day module plan
+Tagline: “Python, algoritmlar va informatika olimpiadasi uchun mustahkam start.”
+
+Week 1 — Sinov hafta: Python foundation and diagnostic
+Dates: 13–18 iyul
+Goal: participant level check, Python basics, logical thinking start.
+Output: each participant solves simple Python tasks and understands whether AlgoCamp fits them.
+Days:
+Dushanba — Orientation, diagnostic test, why algorithms matter. Practice: simple logic questions. Result: personal level identified.
+Seshanba — Python setup, variables, input/output, data types. Practice: 10 basic problems. Result: first working programs.
+Chorshanba — Conditions: if/elif/else, comparison, boolean logic. Practice: decision problems. Result: conditional thinking.
+Payshanba — Loops: for/while, counters, accumulators. Practice: repetition tasks. Result: loop logic.
+Juma — Lists and strings basics. Practice: list/string manipulation. Result: data sequence thinking.
+Shanba — Trial mini-contest and review. Practice: 60–90 minute beginner contest. Result: personal roadmap.
+
+Week 2 — Python problem-solving toolkit
+Dates: 20–25 iyul
+Goal: build practical Python toolkit for competitive tasks.
+Output: participant can solve easy olympiad-style problems independently.
+Days:
+Dushanba — Functions, code structure, reusable logic.
+Seshanba — Lists deeper: indexing, slicing, append, sorting basics.
+Chorshanba — Strings deeper: parsing, character operations, split/join.
+Payshanba — Sets and dictionaries for counting and uniqueness.
+Juma — Math basics: divisibility, modulo, gcd idea, primes intro.
+Shanba — Practice contest + debugging session.
+
+Week 3 — Core algorithms
+Dates: 27 iyul–1 avgust
+Goal: introduce essential algorithms used in olympiads.
+Output: participant understands not only code, but approach.
+Days:
+Dushanba — Algorithmic thinking and complexity intuition.
+Seshanba — Searching: linear search, binary search concept.
+Chorshanba — Sorting logic and built-in sort usage.
+Payshanba — Prefix sums and cumulative logic.
+Juma — Two pointers / sliding window intro for simple cases.
+Shanba — Mixed algorithm challenge.
+
+Week 4 — Competitive programming patterns
+Dates: 3–8 avgust
+Goal: learn common CP patterns through practice.
+Output: participant starts recognizing problem types.
+Days:
+Dushanba — Brute force and optimization.
+Seshanba — Greedy thinking: choose the best local step.
+Chorshanba — Recursion basics and backtracking idea.
+Payshanba — Graph thinking intro: nodes, edges, BFS concept.
+Juma — Implementation discipline: reading statement, edge cases.
+Shanba — Mock contest + editorial review.
+
+Week 5 — Olympiad preparation and advanced basics
+Dates: 10–15 avgust
+Goal: prepare for real contest conditions and harder tasks.
+Output: participant improves accuracy and contest strategy.
+Days:
+Dushanba — Number theory practice: gcd, lcm, primes, modulo.
+Seshanba — Combinatorics intuition and counting tasks.
+Chorshanba — Dynamic programming intro: state, transition, small examples.
+Payshanba — Graph BFS/DFS practical examples.
+Juma — Time management and test case strategy.
+Shanba — Full practice contest.
+
+Week 6 — Consolidation and performance
+Dates: 17–22 avgust
+Goal: strengthen weak points and build confidence.
+Output: participant has a personal CP practice roadmap.
+Days:
+Dushanba — Review of weak topics from contests.
+Seshanba — Easy-to-medium problem set.
+Chorshanba — Pair problem-solving / explanation practice.
+Payshanba — Common mistakes and debugging workshop.
+Juma — Final mock contest preparation.
+Shanba — Final mock contest.
+
+Final 3 days — Result, feedback, roadmap
+Dates: 24–26 avgust
+Goal: evaluate progress and give next-step roadmap.
+Days:
+Dushanba — Final contest editorial and score analysis.
+Seshanba — Individual feedback and next topics roadmap.
+Chorshanba — Closing session, certificates/demo, next practice plan.
+
+2) DataCamp — 45-day module plan
+Tagline: “Python, SQL va Power BI orqali data analytics’ga real start.”
+
+Week 1 — Sinov hafta: Python for data foundation
+Dates: 13–18 iyul
+Goal: introduce data analytics path and basic Python.
+Output: participant understands whether DataCamp fits them and creates first small analysis.
+Days:
+Dushanba — What is Data Analytics? Real examples and diagnostic.
+Seshanba — Python basics: variables, data types, input/output.
+Chorshanba — Lists, dictionaries, tables mindset.
+Payshanba — Conditions and loops for data tasks.
+Juma — Functions and clean code basics.
+Shanba — Mini task: analyze a small table manually and with Python basics.
+
+Week 2 — Data handling with Python
+Dates: 20–25 iyul
+Goal: learn practical data manipulation basics.
+Output: participant can load, inspect, clean, and summarize data.
+Days:
+Dushanba — CSV/data files, rows, columns, data types.
+Seshanba — Pandas intro: DataFrame, read_csv, head, info.
+Chorshanba — Filtering, selecting columns, sorting.
+Payshanba — Cleaning: missing values, duplicates, text cleanup.
+Juma — Grouping and summary statistics.
+Shanba — Mini project: student/sales dataset summary.
+
+Week 3 — SQL foundation
+Dates: 27 iyul–1 avgust
+Goal: learn how data is stored and queried.
+Output: participant can write basic SQL queries.
+Days:
+Dushanba — Database thinking: tables, rows, columns, keys.
+Seshanba — SELECT, WHERE, ORDER BY, LIMIT.
+Chorshanba — Aggregations: COUNT, SUM, AVG, GROUP BY.
+Payshanba — JOIN basics and real examples.
+Juma — SQL practice tasks.
+Shanba — SQL mini challenge.
+
+Week 4 — Power BI and dashboards
+Dates: 3–8 avgust
+Goal: turn data into visuals and dashboards.
+Output: participant creates first dashboard.
+Days:
+Dushanba — Dashboard thinking and business questions.
+Seshanba — Power BI interface, importing data.
+Chorshanba — Charts, cards, filters, slicers.
+Payshanba — Basic data model and relationships.
+Juma — Dashboard design: clarity, layout, colors.
+Shanba — Mini dashboard presentation.
+
+Week 5 — End-to-end analytics project
+Dates: 10–15 avgust
+Goal: combine Python, SQL, and Power BI.
+Output: participant builds a full mini analytics workflow.
+Days:
+Dushanba — Define project question and dataset.
+Seshanba — Clean and prepare data in Python.
+Chorshanba — Query data with SQL.
+Payshanba — Build Power BI dashboard.
+Juma — Insight writing: what happened, why, what to do.
+Shanba — Project review and improvements.
+
+Week 6 — Portfolio and real-world analytics
+Dates: 17–22 avgust
+Goal: prepare a presentable beginner portfolio project.
+Output: participant has a final analytics project.
+Days:
+Dushanba — Case study: education/business/sales analytics.
+Seshanba — KPI thinking and metrics.
+Chorshanba — Data storytelling and presentation.
+Payshanba — Dashboard polish and feedback.
+Juma — Final project preparation.
+Shanba — Final project presentation.
+
+Final 3 days — Feedback and career roadmap
+Dates: 24–26 avgust
+Goal: give each participant next learning steps.
+Days:
+Dushanba — Final feedback and dashboard improvements.
+Seshanba — Roadmap: Excel, SQL, Python, Power BI, portfolio.
+Chorshanba — Closing session, certificates/demo, next project ideas.
+
+3) RoboCamp — 45-day module plan
+Tagline: “Bolalar uchun Scratch, robocoding va robototexnika orqali mantiq va ijod.”
+
+Week 1 — Sinov hafta: visual coding and logic
+Dates: 13–18 iyul
+Goal: introduce kids to coding through visual tasks.
+Output: each participant creates a simple interactive Scratch project.
+Days:
+Dushanba — Camp orientation, safety, what is coding/robotics?
+Seshanba — Scratch interface, sprites, motion, events.
+Chorshanba — Loops and repeated actions.
+Payshanba — Conditions: if/else through games.
+Juma — Variables and scores.
+Shanba — Mini project: simple game or animation.
+
+Week 2 — Game logic and creative coding
+Dates: 20–25 iyul
+Goal: strengthen logic through projects.
+Output: participant creates a playable Scratch mini-game.
+Days:
+Dushanba — Game design basics: goal, rules, player.
+Seshanba — Movement controls and collision.
+Chorshanba — Score, timer, levels.
+Payshanba — Sounds, effects, feedback.
+Juma — Debugging: why the project does not work.
+Shanba — Mini-game demo day.
+
+Week 3 — Robocoding basics
+Dates: 27 iyul–1 avgust
+Goal: connect coding logic with robot behavior.
+Output: participant understands robot commands and sequences.
+Days:
+Dushanba — What is a robot? Input, process, output.
+Seshanba — Commands, sequence, movement logic.
+Chorshanba — Sensors concept: distance/light/touch.
+Payshanba — Conditions with sensors.
+Juma — Loops in robot movement.
+Shanba — Maze or path challenge.
+
+Week 4 — Robotics practical challenges
+Dates: 3–8 avgust
+Goal: solve physical/simulated robotics tasks.
+Output: participant completes structured robot challenges.
+Days:
+Dushanba — Build or simulate simple robot behavior.
+Seshanba — Obstacle avoidance logic.
+Chorshanba — Line-following concept or path tracking.
+Payshanba — Team challenge: robot mission planning.
+Juma — Debugging and improving robot behavior.
+Shanba — Robotics challenge day.
+
+Week 5 — Team project
+Dates: 10–15 avgust
+Goal: build a creative robot/coding project in teams.
+Output: team project prototype.
+Days:
+Dushanba — Choose project idea.
+Seshanba — Divide team roles.
+Chorshanba — Build core logic.
+Payshanba — Add interaction and improvements.
+Juma — Test and fix.
+Shanba — First demo and feedback.
+
+Week 6 — Final project and confidence
+Dates: 17–22 avgust
+Goal: prepare a clean final demo.
+Output: completed final project.
+Days:
+Dushanba — Improve design and logic.
+Seshanba — Add storytelling to project.
+Chorshanba — Practice explaining the project.
+Payshanba — Final debugging.
+Juma — Demo rehearsal.
+Shanba — Final RoboCamp demo.
+
+Final 3 days — Showcase and next step
+Dates: 24–26 avgust
+Goal: celebrate learning and guide next steps.
+Days:
+Dushanba — Feedback and project improvement.
+Seshanba — Parent/mentor showcase preparation.
+Chorshanba — Closing demo, certificates, next learning path.
+
+Note:
+If physical robotics kits are not available, show:
+“Robototexnika mashg‘ulotlari mavjud texnik imkoniyatlarga qarab real qurilma yoki simulyatsiya asosida o‘tiladi.”
+
+4) StartupCamp — 45-day module plan
+Tagline: “G‘oyani prototipga aylantirish: vibe coding, MVP, networking va pitch.”
+
+Week 1 — Sinov hafta: idea and problem discovery
+Dates: 13–18 iyul
+Goal: help participants find a real problem and idea.
+Output: each participant/team selects one idea to explore.
+Days:
+Dushanba — What is a startup? Idea vs problem.
+Seshanba — Problem discovery and user pain.
+Chorshanba — Target audience and user persona.
+Payshanba — Competitor/simple market research.
+Juma — Value proposition.
+Shanba — Idea selection and feedback.
+
+Week 2 — Validation and product thinking
+Dates: 20–25 iyul
+Goal: test whether the idea is worth building.
+Output: validation plan and simple product concept.
+Days:
+Dushanba — Hypothesis and assumptions.
+Seshanba — User interview questions.
+Chorshanba — Survey/feedback collection plan.
+Payshanba — Feature prioritization: must-have vs nice-to-have.
+Juma — User flow and wireframe basics.
+Shanba — Product concept presentation.
+
+Week 3 — Vibe coding and prototype basics
+Dates: 27 iyul–1 avgust
+Goal: use AI/no-code/low-code tools to create a prototype.
+Output: first clickable or working prototype.
+Days:
+Dushanba — What is vibe coding? How to prompt AI tools.
+Seshanba — Landing page or simple app structure.
+Chorshanba — UI sections and content generation.
+Payshanba — Forms, buttons, simple database concept.
+Juma — Testing prototype with users.
+Shanba — Prototype demo and feedback.
+
+Week 4 — MVP building
+Dates: 3–8 avgust
+Goal: improve prototype into a simple MVP.
+Output: MVP v1.
+Days:
+Dushanba — MVP scope and build plan.
+Seshanba — Build core feature.
+Chorshanba — Improve design and usability.
+Payshanba — Add registration/contact/feedback flow.
+Juma — Basic analytics and feedback tracking.
+Shanba — MVP review.
+
+Week 5 — Marketing, networking, and growth
+Dates: 10–15 avgust
+Goal: learn how to present and attract first users.
+Output: basic go-to-market plan.
+Days:
+Dushanba — Brand message and naming.
+Seshanba — Landing page copy and offer.
+Chorshanba — Social media launch plan.
+Payshanba — Networking and partnership basics.
+Juma — Pricing/revenue model basics.
+Shanba — Growth experiment plan.
+
+Week 6 — Pitch and demo preparation
+Dates: 17–22 avgust
+Goal: prepare final presentation and demo.
+Output: pitch deck + demo.
+Days:
+Dushanba — Pitch structure: problem, solution, market, product.
+Seshanba — Storytelling and presentation design.
+Chorshanba — Demo polishing.
+Payshanba — Financial/basic planning and next steps.
+Juma — Pitch rehearsal.
+Shanba — Final pitch day.
+
+Final 3 days — Feedback and launch roadmap
+Dates: 24–26 avgust
+Goal: give each team a clear next step.
+Days:
+Dushanba — Pitch feedback and product improvements.
+Seshanba — 30-day post-camp action plan.
+Chorshanba — Closing demo, certificates, networking, next milestone.
+
+COPY FOR MODULE PLAN SECTION:
+Title:
+“45 kunlik modul rejasi”
+
+Subtitle:
+“Har bir yo‘nalish 1.5 oylik modul asosida tuzilgan. Darslar dushanbadan shanbagacha 09:00 da boshlanadi. Birinchi hafta sinov hafta bo‘lib, ishtirokchilar tanlangan yo‘nalish o‘zlariga mos yoki yo‘qligini ko‘rib olishlari mumkin.”
+
+Badge texts:
+- “45 kun”
+- “Dushanba–Shanba”
+- “09:00”
+- “1-hafta sinov”
+- “Mini-project”
+- “Final demo”
+
+CTA:
+“Shu reja bo‘yicha qatnashmoqchiman”
+“Moslik testini topshirish”
+“Ro‘yxatdan o‘tish”
+
+IMPLEMENTATION TASK:
+Add this plan data to the website and update UI. Ensure it is responsive, attractive, and easy to read on mobile. Use accordion/timeline layout. Keep Uzbek Latin text clean. Do not overload the landing page; show summary on home page and full plan on camp detail pages.
