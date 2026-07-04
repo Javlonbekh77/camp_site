@@ -37,8 +37,7 @@ export function Footer() {
            <div className="flex items-start gap-3">
               <MapPin size={18} className="text-slate-500 mt-0.5 shrink-0" />
               <span>
-                Chiroqchi shahri, <br/>
-                Navoiy viloyati. <br/>
+                Chiroqchi tumani. <br/>
                 <span className="text-xs text-slate-500">(Aniq manzil tez orada e'lon qilinadi)</span>
               </span>
            </div>

@@ -5,8 +5,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        navy: "#070F2B", // Deepest background
-        navyLight: "#1B2A4A", // For cards
+        navy: "#060A12",       // Ultra-dark — matches reference
+        navyLight: "#0D1829",   // Card/panel background
+        navyMid: "#111F38",     // Secondary panels
         stcBlue: "#3B82F6",
         stcCyan: "#06B6D4",
         stcOrange: "#F97316",

@@ -9,30 +9,54 @@ export type ChatMessage = {
 export type AiGuideResponse = {
   message: string;
   done: boolean;
+  suggestions?: string[];       // quick-reply chips for the current question
   recommendation?: Recommendation;
   answers?: QuizAnswerMap;
 };
 
-// ─── Fallback question plan (used when no API key or API fails) ───────────────
-const fallbackQuestions = [
-  "Salom! Men STC Guide — sizning do'stingiz 😊 Avval tanishamiz: siz maktab o'quvchisi, talaba, o'qituvchi yoki boshqa kimsiz? Va taxminan necha yoshdasiz?",
-  "Zo'r! Endi qizig'i — kundalik hayotda nima qilishdan zavq olasiz? Masalan: muammolarni yechish, narsalarni tahlil qilish, qurilmalar bilan o'ynash, yoki yangi g'oyalar ishlab chiqish?",
-  "Tushundim! Endi maqsad haqida — STC campdan keyin qanday o'zgarishni ko'rishni istaysiz o'zingizda? (masalan: olympiadga start, kasbiy yo'nalish, farzandim uchun, startup qurishni bilmoqchi)",
-  "IT bilim darajangiz qanday? Hech narsani bilmayman, ozgina asoslarni bilaman, yoki o'rtacha — qaysi birida? Oldin Python, Scratch, Excel yoki boshqa narsa sinab ko'rganmisiz?",
-  "Deyarli bittaga kelayapmiz! Oxirgi savol: noutbukingiz bormi va offline/online format qaysi biriga qulay? (Chiroqchi shahriga kela olasizmi?)"
+// ─── Fallback questions + suggestions (no API key) ────────────────────────────
+const fallbackSteps: { message: string; suggestions: string[] }[] = [
+  {
+    message: "Salom! 👋 Men STC Guide — keling sizga mos campni topamiz. Siz kimsiz?",
+    suggestions: ["Maktab o'quvchisi", "Talaba", "O'qituvchi", "Boshqa"],
+  },
+  {
+    message: "Zo'r! Bo'sh vaqtingizda ko'proq nima qilasiz?",
+    suggestions: ["Muammolar yechaman", "Narsalar yasayman", "G'oyalar izlayman", "Raqamlar tahlil qilaman"],
+  },
+  {
+    message: "Qiyin mantiqiy jumboqni soatlab yechib o'tirasizmi?",
+    suggestions: ["Ha, qo'ymayman", "Ba'zan", "Yo'q, boshqa yo'l izlayman"],
+  },
+  {
+    message: "Robot yoki qurilma yasash qiziqasizmi?",
+    suggestions: ["Ha, juda!", "Biroz qiziq", "Yo'q"],
+  },
+  {
+    message: "O'z startabingiz yoki ilovangiz bo'lsin deb xohlaysizmi?",
+    suggestions: ["Ha, albatta!", "O'ylagan edim", "Yo'q"],
+  },
+  {
+    message: "IT va dasturlash bo'yicha tajribangiz bormi?",
+    suggestions: ["Python bilaman", "Scratch ishlatganman", "Hech narsa bilmayman", "Excel bilaman"],
+  },
+  {
+    message: "Noutbukingiz bormi?",
+    suggestions: ["Ha, bor", "Yo'q"],
+  },
 ];
 
 function extractUserAnswers(messages: ChatMessage[]): QuizAnswerMap {
   const userMsgs = messages.filter((m) => m.role === "user").map((m) => m.content);
-  const keys = ["status", "interest", "goal", "level", "constraints"];
-  return Object.fromEntries(keys.map((k, i) => [k, userMsgs[i] ?? ""]));
+  return { allAnswers: userMsgs.join(" | ") };
 }
 
 export function getFallbackGuideResponse(messages: ChatMessage[]): AiGuideResponse {
   const userCount = messages.filter((m) => m.role === "user").length;
 
-  if (userCount < fallbackQuestions.length) {
-    return { done: false, message: fallbackQuestions[userCount] };
+  if (userCount < fallbackSteps.length) {
+    const step = fallbackSteps[userCount];
+    return { done: false, message: step.message, suggestions: step.suggestions };
   }
 
   const answers = extractUserAnswers(messages);
@@ -42,70 +66,72 @@ export function getFallbackGuideResponse(messages: ChatMessage[]): AiGuideRespon
     done: true,
     answers,
     recommendation,
-    message: `✨ Tahlil tayyor!\n\n${recommendation.summary}\n\n${recommendation.confidenceMessage}\n\n${recommendation.nextStep}`
+    message: `✨ Tahlil tayyor! ${recommendation.summary}`,
   };
 }
 
-// ─── Groq system prompt ────────────────────────────────────────────────────────
-export function buildStcGuideSystemPrompt() {
-  return `Sen STC Guide — STC-2026 Summer Tech Camp uchun do'stona uzbek yordamchisi (Uzbek Latin tilida gaplashasan).
+// ─── Groq system prompt ───────────────────────────────────────────────────────
+export function buildStcGuideSystemPrompt(): string {
+  return `Sen STC Guide — STC-2026 Summer Tech Camp uchun uzbek tilida gaplashadigan do'stona yordamchisan.
 
-MAQSAD:
-Foydalanuvchi bilan oddiy do'st sifatida suhbat qurib, uning qiziqishlari va maqsadlarini aniqlab, qaysi camp unga mos kelishini 4 ta foizda ko'rsatish.
+MAQSAD: Foydalanuvchi bilan ERKIN suhbat qurish orqali uning qiziqishlarini aniqlab, qaysi camp unga mos ekanligini aniqlash.
 
-CAMP'LAR haqida bilim bazang:
-- AlgoCamp: Python dasturlash + algoritmlar + competitive programming + olympiad tayyorgarlik. Mantiqiy fikrlash, masala yechish, Codeforces, LeetCode yo'nalishi. Haftada Dushanba.
-- DataCamp: SQL + Power BI + ma'lumotlar tahlili + dashboard. Python bilish kerak (talab). Seshanba kunlari. Biznes, raqamlar, Excel+, statistika qiziquvchilar uchun.
-- RoboCamp: Scratch + robototexnika + kodlash asoslari. Yosh bolalar yoki qurilmalarni sevuvchilar uchun. Dushanba, Chorshanba, Juma (har ikki kunda).
-- StartupCamp: G'oya validatsiya + vibe coding + no-code/AI + MVP + pitch. Ijodkor, tadbirkor ruhli yoshlar uchun. Chorshanba kunlari.
+CAMP'LAR:
+- AlgoCamp ⭐: Python, algoritmlar, mantiqiy fikrlash, olimpiada. Mantiqiy fikrlovchilarga ideal.
+- StartupCamp ⭐: Startup, vibe coding, AI vositalar, MVP. Ijodkor va tadbirkorlarga.
+- RoboCamp ⭐: Robototexnika, qurilmalar, Scratch. Qo'llari bilan narsalar yasashni sevuvchilarga.
+- DataCamp: SQL, Power BI, ma'lumotlar tahlili. FAQAT aniq data qiziquvchilar uchun.
 
-SUHBAT QOIDALARI:
-1. Har doim faqat BITTA savol ber — ko'p savol bermа.
-2. Kamida 4 ta savol ber (status, qiziqish, maqsad, daraja). Kerak bo'lsa 5-6 ta.
-3. Javob noaniq bo'lsa "nega aynan shu?" deb qo'shimcha so'ra.
-4. Do'stona, iliq, kulgili yoz — jargon ishlatma.
-5. Foydalanuvchi o'z tilida javob bersa (o'zbek, ingliz) — shu tilga moslab javob ber.
-6. Yetarli ma'lumot to'planganida (kamida 4 javob) — natija ber.
+JAVOB FORMATI (natija berishdan oldin):
+Har bir javobingiz biroz batafsilroq, 3-4 ta gapdan tashkil topsin. Avvalgi javobni tahlil qiling va keyingi savolni bering.
+Suhbat davomli bo'lishi kerak. Jami 10-15 ta savol berganingizdan keyingina natijani e'lon qiling!
 
-NATIJA BERISH:
-Natija berishdan OLDIN, avval insonga tushunarli tahlil yoz (2-3 gap). Keyin QUYIDAGI ANIQ JSON bloкni oxirida qo'sh:
+Har bir javobda MAJBURIY ravishda bergan savolingizga mos 3-4 ta "suggestions" (variantlar) bering:
 
+\`\`\`json
+{
+  "done": false,
+  "message": "Ajoyib tanlov! Mantiqiy masalalar insonning analitik fikrlash qobiliyatini juda kuchli o'stiradi. Shaxsan men uchun ham qiyin muammolarni yechish juda qiziqarli jarayon. Aytingchi, shunday qiyin mantiqiy jumboqqa duch kelsangiz, soatlab o'tirib yechimini topmaguncha qo'ymaysizmi yoki yordam so'raysizmi?",
+  "suggestions": ["Ha, o'zim yechmaguncha qo'ymayman", "Do'stlarim bilan muhokama qilaman", "Internetdan yechim izlayman", "Tez zerikib qolaman"]
+}
+\`\`\`
+
+NATIJA BERISH (10-15 savoldan keyin):
+Natijani berayotganda, JSON blokidan tashqarida (oddiy matn ko'rinishida) xulosa so'zlarini yozishingiz shart. So'ngra JSON qismini bering.
+
+Ajoyib, tahlil tayyor! Sizning javoblaringizni o'rganib chiqib...
 \`\`\`json
 {
   "done": true,
   "primaryCamp": "AlgoCamp",
-  "secondaryCamps": ["DataCamp"],
-  "percentages": {
-    "AlgoCamp": 60,
-    "DataCamp": 25,
-    "RoboCamp": 10,
-    "StartupCamp": 5
-  },
-  "summary": "Siz mantiqiy fikrlashni sevgan va masalalar yechishdan zavq oladigan odam...",
-  "confidenceMessage": "Bu tavsiya sizning javoblaringizga asoslanib berildi.",
-  "nextStep": "Endi ro'yxatdan o'tish formasini to'ldirib, AlgoCamp'ni tanlab qo'ying."
+  "secondaryCamps": ["StartupCamp"],
+  "percentages": { "AlgoCamp": 60, "StartupCamp": 25, "RoboCamp": 10, "DataCamp": 5 },
+  "summary": "Siz mantiqiy fikrlovchisiz — AlgoCamp ideal!",
+  "confidenceMessage": "Bu tavsiya javoblaringizga asoslangan.",
+  "nextStep": "Ro'yxatdan o'tish formasida AlgoCamp'ni tanlang."
 }
 \`\`\`
 
-MUHIM QOIDALAR:
-- Foizlar jumlasi 100 ga teng bo'lishi SHART.
-- Barcha 4 camp uchun foiz ber.
-- JSON blokni \`\`\`json va \`\`\` orasida ber — boshqacha format QABUL QILINMAYDI.
-- JSON bermasdan turib "done":true YOZMA.
-- Natija berishdan oldin kamida 4 marta savol ber.
-`;
+QOIDALAR:
+- Har javob: 3-4 ta gapdan iborat bo'lsin. Do'stona va qiziqarli yozing!
+- suggestions: savolingizga javob bo'ladigan 3-4 ta mantiqiy variant.
+- MAVZUDAN CHIQMANG: Barcha savollar faqat texnologiya, dasturlash, mantiq, startaplar, robototexnika yoki jamoada ishlashga oid bo'lishi SHART. Hayotiy yoki umumiy falsafiy savollar (masalan, "zaharli", "qiziqarli" kabi ma'nosiz gaplar) bermang!
+- DataCamp foizi: user aniq "SQL/dashboard/jadval" demasa 5-15% atrofida ushlab turing.
+- 10-15 savoldan keyingina natija (done: true) bering.
+- Foizlar yig'indisi aniq 100 bo'lishi shart.`;
 }
 
-// ─── JSON parser ───────────────────────────────────────────────────────────────
-export function parseGroqRecommendation(text: string, fallbackAnswers: QuizAnswerMap): AiGuideResponse {
-  // Try markdown code block first: ```json ... ```
+// ─── JSON parser ──────────────────────────────────────────────────────────────
+export function parseGroqRecommendation(
+  text: string,
+  fallbackAnswers: QuizAnswerMap
+): AiGuideResponse {
   let jsonStr: string | null = null;
 
   const mdMatch = text.match(/```json\s*([\s\S]*?)```/);
   if (mdMatch) {
     jsonStr = mdMatch[1].trim();
   } else {
-    // Fallback: find raw JSON object with "done" key
     const rawMatch = text.match(/\{[\s\S]*?"done"[\s\S]*?\}/);
     if (rawMatch) jsonStr = rawMatch[0];
   }
@@ -117,6 +143,8 @@ export function parseGroqRecommendation(text: string, fallbackAnswers: QuizAnswe
   try {
     const parsed = JSON.parse(jsonStr) as {
       done?: boolean;
+      message?: string;
+      suggestions?: string[];
       primaryCamp?: Recommendation["primaryCamp"];
       secondaryCamps?: Recommendation["secondaryCamps"];
       percentages?: Recommendation["percentages"];
@@ -125,10 +153,22 @@ export function parseGroqRecommendation(text: string, fallbackAnswers: QuizAnswe
       nextStep?: string;
     };
 
-    if (!parsed.done || !parsed.primaryCamp) {
-      return { done: false, message: text.replace(jsonStr, "").trim() };
+    // Mid-conversation message with suggestions (not done yet)
+    if (!parsed.done && parsed.message) {
+      return {
+        done: false,
+        message: parsed.message,
+        suggestions: parsed.suggestions ?? [],
+      };
     }
 
+    if (!parsed.done || !parsed.primaryCamp) {
+      // No JSON structure we recognize — return plain text
+      const cleanText = text.replace(/```json[\s\S]*?```/g, "").replace(jsonStr, "").trim();
+      return { done: false, message: cleanText || text };
+    }
+
+    // Final result
     const base = getRecommendation({ ...fallbackAnswers, preferred: parsed.primaryCamp });
     const recommendation: Recommendation = {
       ...base,
@@ -138,10 +178,9 @@ export function parseGroqRecommendation(text: string, fallbackAnswers: QuizAnswe
       summary: parsed.summary ?? base.summary,
       confidenceMessage: parsed.confidenceMessage ?? base.confidenceMessage,
       nextStep: parsed.nextStep ?? base.nextStep,
-      copyText: `STC Guide tavsiyasi:\n${parsed.summary ?? base.summary}\n\nMos camp: ${parsed.primaryCamp}\n${parsed.nextStep ?? base.nextStep}`
+      copyText: `STC Guide tavsiyasi:\n${parsed.summary ?? base.summary}\n\nMos camp: ${parsed.primaryCamp}\n${parsed.nextStep ?? base.nextStep}`,
     };
 
-    // Clean message: remove the json block from visible text
     const cleanMessage = text
       .replace(/```json[\s\S]*?```/g, "")
       .replace(jsonStr, "")
@@ -151,7 +190,7 @@ export function parseGroqRecommendation(text: string, fallbackAnswers: QuizAnswe
       done: true,
       answers: fallbackAnswers,
       recommendation,
-      message: cleanMessage || recommendation.summary
+      message: cleanMessage || recommendation.summary,
     };
   } catch {
     return { done: false, message: text };

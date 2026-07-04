@@ -10,7 +10,7 @@ import { clearLocalRegistrations, createRegistration, getLocalRegistrations, isD
 import type { Registration } from "@/lib/types";
 import { formatCurrencyUZS, toCsv } from "@/lib/utils";
 
-const csvColumns = ["created_at","full_name","phone","telegram","age","status","school_or_work","selected_camps","primary_recommended_camp","current_level","has_laptop","preferred_format","preferred_time","referral_name","referred_by","motivation","status_admin","admin_note"];
+const csvColumns = ["created_at","full_name","phone","telegram","age","status","school_or_work","selected_camps","primary_recommended_camp","current_level","has_laptop","preferred_format","preferred_time","referral_name","referred_by","motivation","payment_agreement","payment_reason","status_admin","admin_note"];
 
 const STATUS_COLORS: Record<string, string> = {
   new: "#3B82F6", contacted: "#06B6D4", confirmed: "#22C55E",
@@ -217,7 +217,12 @@ export default function AdminPage() {
                 {filtered.map((row) => (
                   <tr key={row.id} className="border-t border-white/5 hover:bg-white/3 transition-colors group cursor-pointer" onClick={() => setSelected(row)}>
                     <td className="px-4 py-3 text-slate-400 text-xs font-mono">{row.created_at?.slice(0, 10)}</td>
-                    <td className="px-4 py-3 font-bold text-white">{row.full_name}</td>
+                    <td className="px-4 py-3 font-bold text-white">
+                      {row.full_name}
+                      {(row.referral_name || row.referred_by) && (
+                        <span className="ml-2 px-1.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 text-[9px] uppercase tracking-wider">Referral</span>
+                      )}
+                    </td>
                     <td className="px-4 py-3 text-slate-300 font-mono text-xs">{row.phone}</td>
                     <td className="px-4 py-3 text-cyan-400 text-xs">{row.telegram}</td>
                     <td className="px-4 py-3">
@@ -302,6 +307,15 @@ export default function AdminPage() {
                   <h3 className="text-xs font-black uppercase tracking-widest text-orange-400 mb-2">Referral</h3>
                   <InfoRow icon={<User size={14} />} label="Kim taklif qildi" value={selected.referred_by} />
                   <InfoRow icon={<User size={14} />} label="Bilan keladi" value={selected.referral_name} />
+                </div>
+              )}
+
+              {/* Payment Info */}
+              {(selected.payment_agreement || selected.payment_reason) && (
+                <div className="rounded-xl bg-yellow-500/10 border border-yellow-500/20 p-4">
+                  <h3 className="text-xs font-black uppercase tracking-widest text-yellow-400 mb-2">To'lov sharti</h3>
+                  <InfoRow icon={<BookOpen size={14} />} label="Kelishuv" value={selected.payment_agreement === 'trial' ? "Sinov haftasidan so'ng (100k)" : selected.payment_agreement === 'reason' ? "Sabab ko'rsatgan" : selected.payment_agreement} />
+                  {selected.payment_reason && <InfoRow icon={<MessageCircle size={14} />} label="Sabab" value={selected.payment_reason} />}
                 </div>
               )}
 

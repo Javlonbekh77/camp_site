@@ -5,11 +5,11 @@ export const faqs = [
   },
   {
     question: "To'lov va chegirmalar haqida ma'lumot",
-    answer: "Har bir camp uchun narx alohida. Do'st tavsiyasi orqali ro'yxatdan o'tgan har bir ishtirokchi 120 000 so'm chegirma oladi. To'liq narxlar ro'yxatdan o'tish sahifasida ko'rsatilgan."
+    answer: "Har bir camp uchun narx 100 000 so'm. Lekin agar siz boshqa foydalanuvchini taklif qilsangiz har bir kishi uchun 20 000 so'm bonus olasiz! Yoki to'lov qila olmasligingizga jiddiy sabab bo'lsa va bu sabab tasdiqlansa, mutlaqo bepul o'qishingiz mumkin. To'lovlar 1 haftalik sinov muddatidan so'ng, yangi hafta boshidan 1 hafta ichida amalga oshirilishi kerak."
   },
   {
     question: "Sinov haftasidan keyin nima bo'ladi?",
-    answer: "Birinchi hafta sinov hafta hisoblanadi — bu vaqt ichida camp sizga mos yoki yo'qligini ko'rib olasiz. Agar davom ettirmasangiz, to'lov qaytariladi yoki yo'nalishni o'zgartirishingiz mumkin."
+    answer: "Birinchi hafta sinov hafta hisoblanadi. Agar kurs oxirigacha hech narsa o'rganmagan bo'lsangiz, pulingiz qaytarilib beriladi! Siz hech nima yo'qotmaysiz, aksincha ko'p narsalar yutishingiz mumkin!"
   },
   {
     question: "Sertifikat beriladimi?",
@@ -17,10 +17,10 @@ export const faqs = [
   },
   {
     question: "Camp offline yoki onlainmi?",
-    answer: "Camp Chiroqchi shahrida offline formatda o'tkaziladi. Bu yerda mentor bilan yuzma-yuz muloqot, guruh ishi va amaliy mashg'ulotlar mavjud. Onlayn variant hozircha ko'rib chiqilmoqda."
+    answer: "Camp hozircha Chiroqchi tumanida offline formatda o'tkaziladi. Bu yerda mentor bilan yuzma-yuz muloqot, guruh ishi va amaliy mashg'ulotlar mavjud."
   },
   {
     question: "Qaysi yosh va darajadagilar qatnashishi mumkin?",
-    answer: "Camp 13-19 yoshdagi o'quvchilarga mo'ljallangan. Oldindan bilim talab etilmaydi — boshlang'ich darajadan tortib, o'rta darajagacha bo'lgan yoshlar qatnasha oladi."
+    answer: "Yosh muhim emas, barchasi qiziqish va intilish bilan o'lchanadi! Oldindan bilim talab etilmaydi — boshlang'ich darajadan tortib, o'rta darajagacha bo'lgan barcha qiziqishi borlar qatnasha oladi."
   }
 ];

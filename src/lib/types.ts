@@ -37,6 +37,8 @@ export type Registration = {
   referral_phone?: string;
   referred_by?: string;
   discount_note?: string;
+  payment_agreement?: string;
+  payment_reason?: string;
   consent: boolean;
   status_admin?: string;
   admin_note?: string;
