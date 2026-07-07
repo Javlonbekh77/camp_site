@@ -33,12 +33,7 @@ const schema = z.object({
   referral_name: z.string().optional(),
   referral_phone: z.string().optional(),
   referred_by: z.string().optional(),
-  payment_agreement: z.string().min(1, "To'lov shartini tanlang"),
-  payment_reason: z.string().optional(),
   consent: z.boolean().refine((v) => v, "Rozilik kerak")
-}).refine(data => data.payment_agreement !== 'reason' || (data.payment_reason && data.payment_reason.length > 3), {
-  message: "Iltimos, sababni yozing",
-  path: ["payment_reason"]
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -66,8 +61,6 @@ function RegisterContent() {
       selected_camps: campFromQuery ? [campFromQuery] : [],
       primary_recommended_camp: "",
       user_pasted_ai_result: "",
-      payment_agreement: "",
-      payment_reason: "",
       consent: false
     }
   });
@@ -136,7 +129,7 @@ function RegisterContent() {
               {success.primary_recommended_camp && <p><span className="text-slate-500">Tavsiya:</span> <span className="font-bold text-white">{success.primary_recommended_camp}</span></p>}
               <p><span className="text-slate-500">Qabul muddati:</span> <span className="font-bold text-white">{formatDateTimeUz(siteConfig.deadline)}</span></p>
               <p><span className="text-slate-500">Birinchi dars:</span> <span className="font-bold text-white">{formatDateTimeUz(siteConfig.firstLesson)}</span></p>
-              <p className="text-xs text-slate-500">Birinchi hafta sinov hafta — mos bo'lmasa to'lov qaytariladi.</p>
+              <p className="text-xs text-slate-500">Birinchi hafta sinov hafta hisoblanadi.</p>
             </div>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row justify-center">
               <LinkButton href={`https://t.me/${siteConfig.telegram.replace("@", "")}`} className="bg-blue-600 border-none text-white hover:bg-blue-500">Telegram orqali bog'lanish</LinkButton>
@@ -151,7 +144,7 @@ function RegisterContent() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-navy py-24 px-4">
+      <main className="min-h-screen bg-navy py-20 md:py-24 px-4 sm:px-6">
         <div className="container max-w-5xl">
           {/* Page header */}
           <div className="text-center mb-12">
@@ -302,36 +295,8 @@ function RegisterContent() {
               </div>
             </FormSection>
 
-            {/* Step 4 — Payment Info */}
-            <FormSection step={4} title="To'lov shartlari" color="from-yellow-500 to-orange-400">
-              <div className="rounded-2xl bg-navy/60 border border-white/5 p-5 mb-5">
-                 <p className="text-sm text-slate-300 leading-relaxed">
-                   Har bir camp narxi <strong className="text-white">100 000 so'm</strong>. 
-                   Siz do'stingizni taklif qilsangiz har biri uchun <strong className="text-orange-400">20 000 so'm bonus</strong> olasiz.
-                   To'lovlarni darhol emas, <strong className="text-white">1 haftalik bepul sinov muddatidan so'ng</strong> yangi hafta boshida 1 hafta ichida amalga oshirishingiz mumkin.
-                   Agar kurs oxirigacha hech narsa o'rganmasangiz, pulingiz qaytarib beriladi! Siz hech nima yo'qotmaysiz!
-                 </p>
-              </div>
-
-              <div className="grid gap-5">
-                <DarkField label="To'lov bo'yicha tanlovingiz *" error={form.formState.errors.payment_agreement?.message}>
-                  <select {...form.register("payment_agreement")} className="dark-input">
-                    <option value="">Tanlang</option>
-                    <option value="trial">Sinov haftasidan so'ng to'lov qilaman (100k so'm)</option>
-                    <option value="reason">To'lov qila olmasligimga jiddiy sababim bor (sababni yozaman)</option>
-                  </select>
-                </DarkField>
-
-                {form.watch("payment_agreement") === "reason" && (
-                  <DarkField label="To'lov qila olmasligingiz sababini yozing *" error={form.formState.errors.payment_reason?.message}>
-                    <textarea {...form.register("payment_reason")} className="dark-input min-h-[80px]" placeholder="Masalan: Oila sharoitim og'ir, lekin o'qishga ishtiyoqim baland..." />
-                  </DarkField>
-                )}
-              </div>
-            </FormSection>
-
-            {/* Step 5 — Consent */}
-            <FormSection step={5} title="Rozilik va yakun" color="from-green-500 to-emerald-400">
+            {/* Step 4 — Consent */}
+            <FormSection step={4} title="Rozilik va yakun" color="from-green-500 to-emerald-400">
               <label className="flex items-start gap-4 rounded-2xl bg-navy/60 border border-white/5 p-5 cursor-pointer hover:border-white/10 transition-colors">
                 <input type="checkbox" {...form.register("consent")} className="mt-1 w-5 h-5 accent-orange-500 flex-shrink-0" />
                 <span className="text-sm text-slate-300 leading-relaxed">Ma'lumotlarim STC-2026 ro'yxatdan o'tish jarayoni uchun saqlanishiga roziman. Ma'lumotlaringiz xavfsiz uchinchi shaxslarga berilmaydi.</span>

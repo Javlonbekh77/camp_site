@@ -51,8 +51,12 @@ export default function QuizPage() {
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, showResult]);
+    if (showResult) {
+      setTimeout(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
+  }, [showResult]);
 
   useEffect(() => {
     if (recommendation) {
@@ -110,8 +114,8 @@ export default function QuizPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-navy pt-20 pb-12 px-4">
-        <div className="container max-w-5xl">
+      <main className="min-h-screen bg-navy pt-16 md:pt-20 pb-4 md:pb-12 px-2 md:px-4">
+        <div className="container max-w-5xl px-2 md:px-4">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold px-4 py-2 rounded-full mb-4">
@@ -123,17 +127,17 @@ export default function QuizPage() {
 
           <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
             {/* Chat */}
-            <div className="rounded-3xl bg-navyLight/70 border border-white/10 overflow-hidden backdrop-blur-md shadow-2xl flex flex-col">
+            <div className="rounded-2xl md:rounded-3xl bg-navyLight/70 border border-white/10 overflow-hidden backdrop-blur-md shadow-2xl flex flex-col">
               {/* Chat header */}
-              <div className="bg-gradient-to-r from-blue-600/80 to-cyan-600/80 p-5 flex items-center gap-4 border-b border-white/10">
-                <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center">
-                  <Sparkles className="text-white" size={22} />
+              <div className="bg-gradient-to-r from-blue-600/80 to-cyan-600/80 p-3 md:p-5 flex items-center gap-3 md:gap-4 border-b border-white/10">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center">
+                  <Sparkles className="text-white" size={20} />
                 </div>
                 <div>
-                  <h2 className="font-black text-white">STC Guide AI</h2>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <div className={`w-2 h-2 rounded-full animate-pulse ${source === "fallback" ? "bg-red-400" : "bg-green-400"}`} />
-                    <p className="text-xs text-white/70">
+                  <h2 className="font-black text-white text-sm md:text-base">STC Guide AI</h2>
+                  <div className="flex items-center gap-1.5 md:gap-2 mt-0.5">
+                    <div className={`w-1.5 h-1.5 md:w-2 md:h-2 rounded-full animate-pulse ${source === "fallback" ? "bg-red-400" : "bg-green-400"}`} />
+                    <p className="text-[10px] md:text-xs text-white/70">
                       {source === "groq" ? "🟢 Online" : source === "fallback" ? "🔴 Offline" : "⏳ Ulanmoqda..."}
                     </p>
                   </div>
@@ -142,7 +146,7 @@ export default function QuizPage() {
 
               {/* Messages */}
               <div
-                className="flex-1 max-h-[55vh] min-h-[400px] overflow-y-auto p-5 space-y-3"
+                className="flex-1 h-[65vh] md:max-h-[55vh] md:min-h-[400px] overflow-y-auto p-3 md:p-5 space-y-3"
                 style={{ background: "radial-gradient(circle at top right, rgba(6,182,212,0.05), transparent 50%), rgba(6,10,18,0.5)" }}
               >
                 {messages.map((msg, i) => (

@@ -1,4 +1,4 @@
-import { ArrowRight, CalendarClock, CheckCircle2, MapPin, Sparkles, HelpCircle, Gift, ChevronRight, CheckCircle, RotateCcw } from "lucide-react";
+import { ArrowRight, CalendarClock, CheckCircle2, MapPin, Sparkles, HelpCircle, ChevronRight, CheckCircle, RotateCcw } from "lucide-react";
 import { CampCard } from "@/components/CampCard";
 import { FAQAccordion } from "@/components/FAQAccordion";
 import { FloatingCTA } from "@/components/FloatingCTA";
@@ -8,8 +8,6 @@ import { LinkButton } from "@/components/ui/Button";
 import CelestialMatrixShader from "@/components/ui/martrix-shader";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { camps } from "@/data/camps";
-import { siteConfig } from "@/lib/config";
-import { formatCurrencyUZS } from "@/lib/utils";
 
 export default function HomePage() {
   return (
@@ -26,16 +24,15 @@ export default function HomePage() {
           <div className="container relative z-10">
             <ScrollReveal>
               <div className="flex flex-col items-center text-center">
-                <h1 className="mt-7 max-w-5xl text-4xl font-black leading-tight tracking-tight text-white md:text-6xl lg:text-[72px]">
+                <h1 className="mt-7 max-w-5xl text-[32px] sm:text-4xl font-black leading-tight tracking-tight text-white md:text-6xl lg:text-[72px]">
                   Yozni bekor o'tkazma – <br className="hidden md:block" />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-300 drop-shadow-[0_0_25px_rgba(249,115,22,0.6)]">
                     kelajakka qadam
                   </span> bilan boshla.
                 </h1>
                 
-                <p className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-300 md:text-xl font-medium">
-                  Chiroqchi tumanida Python, algoritmlar, data analytics, robototexnika <br className="hidden lg:block"/>
-                  va startup bo'yicha 45 kunlik intensiv yozgi camp.
+                <p className="mt-5 max-w-3xl text-base sm:text-lg leading-relaxed text-slate-300 md:text-xl font-medium">
+                  Chiroqchi tumanida Dasturlash, Robototexnika va Startup bo'yicha 45 kunlik intensiv yozgi camp.
                 </p>
 
                 <div className="mt-12 flex flex-wrap justify-center gap-4">
@@ -196,7 +193,7 @@ export default function HomePage() {
                      ["Sinov hafta", "13-19 iyul", "1 hafta bepul sinov va tanishuv", "bg-green-500", 3],
                      ["Manzil tez orada", "Chiroqchi tumani", "Aniq manzil e'lon qilinadi", "bg-purple-500", 4]
                    ].map(([title, date, desc, colorClass, num], idx) => (
-                      <div key={title} className="flex flex-col items-center md:items-start bg-navyLight/80 p-5 rounded-xl border border-white/5 text-center md:text-left relative mt-4 md:mt-0">
+                       <div key={title} className="flex flex-col items-center md:items-start bg-navyLight/80 p-5 rounded-xl border border-white/5 text-center md:text-left relative mt-4 md:mt-0">
                          <div className={`absolute -top-4 -left-4 md:-left-2 md:-top-5 w-8 h-8 rounded-full ${colorClass} text-white font-bold flex items-center justify-center shadow-lg ring-4 ring-navy`}>
                            {num}
                          </div>
@@ -209,28 +206,6 @@ export default function HomePage() {
               </div>
             </ScrollReveal>
           </div>
-        </section>
-
-        {/* REFERRAL BANNER */}
-        <section className="py-6 relative z-10">
-          <ScrollReveal>
-            <div className="container">
-              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-600 via-amber-500 to-yellow-500 p-8 text-white shadow-[0_0_30px_rgba(249,115,22,0.3)] flex flex-col md:flex-row items-center justify-between gap-6 border border-orange-400/50">
-                <div className="flex items-center gap-6">
-                  <div className="bg-white/20 p-4 rounded-2xl backdrop-blur-sm">
-                     <Gift size={40} className="text-white drop-shadow-md" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-black md:text-3xl drop-shadow-md">Hech nima yo'qotmaysiz, ko'p narsa yutasiz!</h2>
-                    <p className="mt-2 text-sm md:text-base font-medium text-white/90">Har bir taklif qilingan foydalanuvchi uchun {formatCurrencyUZS(siteConfig.referralDiscount)} bonus oling. Yoki uzrli sabab bilan mutlaqo bepul o'qing! O'rganmasangiz, pulingiz qaytariladi.</p>
-                  </div>
-                </div>
-                <LinkButton href="/register" className="bg-white text-orange-600 hover:bg-orange-50 border-0 shadow-lg py-5 px-6 rounded-xl font-bold whitespace-nowrap">
-                  Batafsil shartlar <ArrowRight size={18} className="ml-2" />
-                </LinkButton>
-              </div>
-            </div>
-          </ScrollReveal>
         </section>
 
         {/* FAQ & CTA ROW */}

@@ -5,7 +5,7 @@ import { siteConfig } from "@/lib/config";
 export function Footer() {
   return (
     <footer className="bg-navy pt-16 pb-8 border-t border-white/5 relative z-10">
-      <div className="container grid gap-12 md:grid-cols-4">
+      <div className="container grid gap-8 md:gap-12 md:grid-cols-4">
         
         {/* Brand */}
         <div className="md:col-span-1">
